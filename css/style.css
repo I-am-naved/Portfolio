@@ -990,6 +990,98 @@ html {
 }
 
 /* ===================================
+   Certificates & Awards Section
+   =================================== */
+.certificates-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.certificate-item {
+    position: relative;
+    border-radius: 15px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.certificate-item:hover {
+    transform: translateY(-10px);
+}
+
+.certificate-image-wrapper {
+    position: relative;
+    overflow: hidden;
+    border-radius: 15px;
+    background: var(--dark-bg);
+    border: 1px solid var(--border-color);
+    aspect-ratio: 4 / 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.certificate-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    transition: transform 0.5s ease;
+    padding: 1rem;
+}
+
+.certificate-item:hover .certificate-image {
+    transform: scale(1.05);
+}
+
+.certificate-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+    display: flex;
+    align-items: flex-end;
+    padding: 1.5rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.certificate-item:hover .certificate-overlay {
+    opacity: 1;
+}
+
+.certificate-info {
+    width: 100%;
+}
+
+.certificate-info h5 {
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.certificate-info p {
+    color: var(--light-text);
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.certificate-date {
+    display: inline-block;
+    background: rgba(13, 110, 253, 0.2);
+    color: var(--primary-color);
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    border: 1px solid rgba(13, 110, 253, 0.3);
+}
+
+/* ===================================
    Services Section
    =================================== */
 .service-card {
@@ -1805,6 +1897,15 @@ body {
     
     .timeline-content {
         padding: 1.25rem;
+    }
+    
+    .certificates-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .certificate-image-wrapper {
+        aspect-ratio: 3 / 2;
     }
 }
 
