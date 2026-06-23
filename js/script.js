@@ -1,4 +1,25 @@
 // ===================================
+// 3D Panel Navigation Integration
+// ===================================
+document.addEventListener('panelChange', (e) => {
+    const panel = e.detail;
+    const exploreBtn = document.getElementById('exploreBtn');
+    if (exploreBtn && panel) {
+        exploreBtn.setAttribute('href', `#${panel.id}`);
+    }
+});
+
+document.getElementById('askForm')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const input = e.target.querySelector('input');
+    const query = input?.value.trim();
+    if (query) {
+        window.location.href = `mailto:inavedul778@gmail.com?subject=Portfolio Inquiry&body=${encodeURIComponent(query)}`;
+        input.value = '';
+    }
+});
+
+// ===================================
 // Smooth Scrolling
 // ===================================
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -20,10 +41,19 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 // ===================================
 window.addEventListener('scroll', function() {
     const navbar = document.getElementById('mainNav');
-    if (window.scrollY > 50) {
-        navbar.classList.add('scrolled');
+    const hero = document.querySelector('.three-hero');
+    const heroHeight = hero ? hero.offsetHeight : 0;
+
+    if (window.scrollY > heroHeight - 100) {
+        navbar?.classList.add('nav-visible');
     } else {
-        navbar.classList.remove('scrolled');
+        navbar?.classList.remove('nav-visible');
+    }
+
+    if (window.scrollY > 50) {
+        navbar?.classList.add('scrolled');
+    } else {
+        navbar?.classList.remove('scrolled');
     }
     
     // Update active nav link
@@ -132,16 +162,7 @@ progressBars.forEach(bar => {
 // ===================================
 // Parallax Effect for Hero Section (Desktop Only)
 // ===================================
-if (window.innerWidth > 768) {
-    window.addEventListener('scroll', function() {
-        const scrolled = window.pageYOffset;
-        const heroImage = document.querySelector('.hero-image');
-        if (heroImage && scrolled < 800) {
-            heroImage.style.transform = `translateY(${scrolled * 0.2}px)`;
-            heroImage.style.opacity = Math.max(0.3, 1 - (scrolled / 800));
-        }
-    });
-}
+// Disabled — hero is now Three.js 3D scene
 
 // ===================================
 // Mouse Move Parallax Effect (Desktop Only)
@@ -238,80 +259,55 @@ document.querySelectorAll('.skill-progress-bar').forEach(progressBar => {
 });
 
 // ===================================
-// Language Transition (English to French Loop) - Smooth Crossfade
+// Language Transition — disabled (3D hero replaces text-transition elements)
 // ===================================
-let currentLanguage = 'en';
-let isTransitioning = false;
-
-function changeLanguage() {
-    if (isTransitioning) return;
-    
-    isTransitioning = true;
-    const textElements = document.querySelectorAll('.text-transition');
-    
-    // Toggle language
-    currentLanguage = currentLanguage === 'en' ? 'fr' : 'en';
-    
-    textElements.forEach((element, index) => {
-        const enText = element.getAttribute('data-en');
-        const frText = element.getAttribute('data-fr');
-        
-        if (!enText || !frText) return;
-        
-        const content = element.querySelector('.text-transition-content') || element;
-        const newText = currentLanguage === 'en' ? enText : frText;
-        
-        // Stagger animations slightly
-        setTimeout(() => {
-            // Fade out
-            content.classList.add('fade-out');
-            
-            setTimeout(() => {
-                // Change text
-                content.textContent = newText;
-                
-                // Remove fade-out, add fade-in
-                content.classList.remove('fade-out');
-                content.classList.add('fade-in');
-                
-                // Remove fade-in after animation
-                setTimeout(() => {
-                    content.classList.remove('fade-in');
-                    
-                    if (index === textElements.length - 1) {
-                        isTransitioning = false;
-                    }
-                }, 600);
-            }, 300);
-        }, index * 50);
-    });
-}
-
-// Start language transition loop after page load
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize with English (default)
     const textElements = document.querySelectorAll('.text-transition');
+    if (textElements.length === 0) return;
+
+    let currentLanguage = 'en';
+    let isTransitioning = false;
+
+    function changeLanguage() {
+        if (isTransitioning) return;
+        isTransitioning = true;
+        currentLanguage = currentLanguage === 'en' ? 'fr' : 'en';
+
+        textElements.forEach((element, index) => {
+            const enText = element.getAttribute('data-en');
+            const frText = element.getAttribute('data-fr');
+            if (!enText || !frText) return;
+
+            const content = element.querySelector('.text-transition-content') || element;
+            const newText = currentLanguage === 'en' ? enText : frText;
+
+            setTimeout(() => {
+                content.classList.add('fade-out');
+                setTimeout(() => {
+                    content.textContent = newText;
+                    content.classList.remove('fade-out');
+                    content.classList.add('fade-in');
+                    setTimeout(() => {
+                        content.classList.remove('fade-in');
+                        if (index === textElements.length - 1) isTransitioning = false;
+                    }, 600);
+                }, 300);
+            }, index * 50);
+        });
+    }
+
     textElements.forEach(element => {
         const enText = element.getAttribute('data-en');
-        if (enText) {
-            // Wrap content in span if not already wrapped
-            if (!element.querySelector('.text-transition-content')) {
-                const content = document.createElement('span');
-                content.className = 'text-transition-content';
-                content.textContent = enText;
-                element.innerHTML = '';
-                element.appendChild(content);
-            } else {
-                element.querySelector('.text-transition-content').textContent = enText;
-            }
+        if (enText && !element.querySelector('.text-transition-content')) {
+            const content = document.createElement('span');
+            content.className = 'text-transition-content';
+            content.textContent = enText;
+            element.innerHTML = '';
+            element.appendChild(content);
         }
     });
-    
-    // Wait 3 seconds before starting the transition
-    setTimeout(() => {
-        // Change language every 4.5 seconds
-        setInterval(changeLanguage, 4500);
-    }, 3000);
+
+    setTimeout(() => setInterval(changeLanguage, 4500), 3000);
 });
 
 // ===================================

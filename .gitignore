@@ -1,0 +1,2 @@
+# Ignore local server log and temporary files
+server.log
